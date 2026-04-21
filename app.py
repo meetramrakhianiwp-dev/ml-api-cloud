@@ -1,12 +1,17 @@
-from flask import Flask, request, jsonify
-import joblib
 import os
+import joblib
+from flask import Flask, request, jsonify
 
 application = Flask(__name__)
 
-# Load trained model (FIXED)
+print("Starting app...")
+
 model_path = os.path.join(os.getcwd(), "sentiment_model.joblib")
+print("Loading model from:", model_path)
+
 model = joblib.load(model_path)
+
+print("Model loaded successfully")
 
 @application.route("/predict", methods=["POST"])
 def predict():
@@ -14,9 +19,7 @@ def predict():
     text = data.get("text", "").strip()
 
     if not text:
-        return jsonify({
-            "error": "No text provided. Please send a JSON body with a 'text' key."
-        }), 400
+        return jsonify({"error": "No text provided"}), 400
 
     prediction = model.predict([text])[0]
 
