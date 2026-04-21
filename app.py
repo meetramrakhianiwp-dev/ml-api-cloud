@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify
 import joblib
+import os
 
 application = Flask(__name__)
 
-# Load trained model
-model = joblib.load("sentiment_model.joblib")
+# Load trained model (FIXED)
+model_path = os.path.join(os.getcwd(), "sentiment_model.joblib")
+model = joblib.load(model_path)
 
 @application.route("/predict", methods=["POST"])
 def predict():
